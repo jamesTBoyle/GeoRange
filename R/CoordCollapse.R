@@ -9,29 +9,10 @@
 #' @note Points are truncated to the hundredths place before checking for duplicates
 #' @export
 CoordCollapse<-function(longs,lats){
-  NSites<-length(lats)
-  lats<-lats[order(longs)]
-  longs<-sort(longs)
-  dups<-c()
-  if(NSites>1){
-    for(i in 2:NSites){
-      if(longs[i]==longs[i-1]){
-        i_2<-i-1
-        LongDupPos<-which(longs[1:i_2]==longs[i])
-        if(any(lats[i]==lats[LongDupPos])){
-          dups<-c(dups,i)
-        }
-      }
-    }
-  }
-  if(length(dups)!=0){
-    longs_collapsed<-longs[-dups]
-    lats_collapsed<-lats[-dups]
-  }
-  else{
-    longs_collapsed<-longs
-    lats_collapsed<-lats
-  }
-  res<-data.frame(Longitude=longs_collapsed,Latitude=lats_collapsed)
-  return(res)
+	Coords<-cbind(longs,lats)
+	Coords<-as.data.frame(Coords)
+	Coords<-unique(Coords[,c("longs","lats")])
+	names(Coords)<-c("Longitude","Latitude")
+	Coords<-Coords[order(Coords$Longitude),]
+	return(Coords)
 }
